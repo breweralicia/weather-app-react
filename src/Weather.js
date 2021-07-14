@@ -3,12 +3,15 @@ import { useState } from "react";
 import GetDate from "./GetDate";
 import "./Weather";
 import Search from "./Search";
+import DisplayForecast from "./DisplayForecast";
+import WeatherTemp from "./WeatherTemp";
 
 export default function Weather(props) {
   let [temperature, setTemperature] = useState(props.temperature);
   let [weatherData, setWeatherData] = useState({ ready: false });
+  
 
-  const { humidity, date, wind, forecast } = weatherData;
+  const { humidity, date, wind } = weatherData;
 
   function displayData(response){
     const { data } = response;
@@ -26,16 +29,6 @@ export default function Weather(props) {
     });
   }
 
-  function showFahrenheit(event) {
-    event.preventDefault();
-    setTemperature((props.temperature * 9) / 5 + 32);
-  }
-
-  function showCelsius(event) {
-    event.preventDefault();
-    setTemperature(props.temperature);
-  }
-
   return (
     <div className="container">
       <Search setTemperature={setTemperature} displayData={displayData} />
@@ -43,26 +36,13 @@ export default function Weather(props) {
 
       <li id="description"></li>
       <img src="#" alt="" id="icon" />
-      <div className="unites-f-c">
         <div className="row">
           <div className="col-sm">
-            {temperature && <strong className="degree">{Math.round(temperature)}</strong>}
-            <span className="unites">
-              <a
-                id="switching-celsius"
-                className="active"
-                href="/"
-                onClick={showCelsius}
-              >
-                ℃|
-              </a>
-              <a id="switching-fahrenheit" href="/" onClick={showFahrenheit}>
-                ℉
-              </a>
-            </span>
+            
+            <WeatherTemp celsius={temperature}/>
+
           </div>
         </div>
-      </div>
       { (humidity && wind) && (
         <div className="placeholder-windspeed">
           <div className="row">
@@ -77,7 +57,7 @@ export default function Weather(props) {
           </div>
         </div>
       )}
-      { forecast && <div className="weather-forcast" id="forcast">{forecast}</div>}
+      <DisplayForecast />
       <br />
       <a className="github" href="https://github.com/breweralicia">
         Alicia's GitHub
